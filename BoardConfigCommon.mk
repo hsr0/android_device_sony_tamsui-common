@@ -9,7 +9,6 @@ BOARD_WANTS_EMMC_BOOT := true
 
 # Legacy
 TARGET_QCOM_DISPLAY_VARIANT := legacy
-TARGET_QCOM_AUDIO_VARIANT := legacy
 TARGET_QCOM_MEDIA_VARIANT := legacy
 
 # Platform
@@ -32,7 +31,7 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 
-COMMON_GLOBAL_CFLAGS += -DSONY_CAMERA -DQCOM_HARDWARE -DQCOM_SONY_HARDWARE -DMR0_AUDIO_BLOB -DANCIENT_GL -DQCOM_BSP_WITH_GENLOCK -Wno-sign-compare -Wno-error -Wno-deprecated -Wno-parentheses -Wno-ignored-qualifiers
+COMMON_GLOBAL_CFLAGS += -DSONY_CAMERA -DQCOM_HARDWARE -DQCOM_SONY_HARDWARE -DANCIENT_GL -DQCOM_BSP_WITH_GENLOCK -Wno-sign-compare -Wno-error -Wno-deprecated -Wno-parentheses -Wno-ignored-qualifiers
 COMMON_GLOBAL_CFLAGS += -DEGL_NEEDS_FNW
 
 # Kernel information
@@ -62,7 +61,14 @@ QCOM_BSP_WITH_GENLOCK := true
 # libEGL: allow devices to workaround Google bug 10194508
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 
+# Device specific modules
 TARGET_PROVIDES_LIBLIGHT := true
+TARGET_PROVIDES_LIBAUDIO := true
+
+# Audio
+TARGET_QCOM_AUDIO_VARIANT := caf
+BOARD_USES_LEGACY_ALSA_AUDIO := true
+COMMON_GLOBAL_CFLAGS += -DNO_TUNNELED_SOURCE
 
 # Camera
 COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB -DQCOM_NO_SECURE_PLAYBACK -DQCOM_ICS_DECODERS
