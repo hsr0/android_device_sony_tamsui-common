@@ -56,19 +56,6 @@ on post-fs
     chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
     chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
 
-    # Setup permissions for accelerometer
-    chown root system /dev/akm8975_dev
-    chmod 0660 /dev/akm8975_dev
-    chown root system /data/misc/akmd_set.txt
-    chmod 0660 /data/misc/akmd_set.txt
-    chown system system /sys/class/compass/akm8975/enable_acc
-    chown system system /sys/class/compass/akm8975/enable_mag
-    chown system system /sys/class/compass/akm8975/enable_ori
-    chown system system /sys/class/compass/akm8975/delay_acc
-    chown system system /sys/class/compass/akm8975/delay_mag
-    chown system system /sys/class/compass/akm8975/delay_ori
-    chown system system /sys/class/compass/akm8975/accel
-
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -260,21 +247,6 @@ service cnd /system/bin/cnd
     class main
     socket cnd stream 666 root radio
 
-service qmuxd /system/bin/qmuxd
-    class main
-    user radio
-    group radio audio bluetooth gps qcom_diag
-
-service netmgrd /system/bin/netmgrd
-    class late_start
-
-# SEMC, TA Daemon
-service tad /sbin/tad /dev/block/mmcblk0 8,16,256
-    class trimarea
-    user root
-    group root
-    socket tad stream 0660 system system
-
 on property:sys.radio.shutdown=true
    exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
 
@@ -383,11 +355,6 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1
     class late_start
     disabled
 
-# Accelerometer
-service akmd /system/bin/akmd8975
-    class main
-    user root
-
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
@@ -398,8 +365,3 @@ service gpu_dcvsd /system/bin/gpu_dcvsd
     class late_start
     user root
     oneshot
-
-service thermald /system/bin/thermald -c /system/etc/thermald.conf
-    class main
-    socket thermald stream 0666 root root
-    user root
